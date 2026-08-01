@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
-import { createFoodDonation } from "../services/foodDonation.service.js";
+import {
+  createFoodDonation,
+  getAllDonations,
+} from "../services/foodDonation.service.js";
 
 export const createDonation = async (
   req: Request,
@@ -13,6 +16,24 @@ export const createDonation = async (
     }
 
     return res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+};
+
+export const getDonations = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const result = await getAllDonations();
+
+    return res.status(200).json(result);
   } catch (error) {
     console.error(error);
 

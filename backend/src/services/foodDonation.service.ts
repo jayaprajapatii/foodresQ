@@ -4,7 +4,6 @@ import { CreateFoodDonationInput } from "../types/foodDonation.types.js";
 export const createFoodDonation = async (
   data: CreateFoodDonationInput
 ) => {
-
   const restaurant = await prisma.user.findUnique({
     where: {
       id: data.restaurantId,
@@ -37,5 +36,18 @@ export const createFoodDonation = async (
   return {
     success: true,
     donation,
+  };
+};
+
+export const getAllDonations = async () => {
+  const donations = await prisma.foodDonation.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return {
+    success: true,
+    donations,
   };
 };
