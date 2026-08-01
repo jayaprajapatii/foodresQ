@@ -102,3 +102,28 @@ export const updateFoodDonation = async (
     donation,
   };
 };
+export const deleteFoodDonation = async (id: number) => {
+  const existingDonation = await prisma.foodDonation.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!existingDonation) {
+    return {
+      success: false,
+      message: "Donation not found",
+    };
+  }
+
+  await prisma.foodDonation.delete({
+    where: {
+      id,
+    },
+  });
+
+  return {
+    success: true,
+    message: "Donation deleted successfully",
+  };
+};
