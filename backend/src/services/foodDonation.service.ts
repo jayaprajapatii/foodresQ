@@ -51,3 +51,22 @@ export const getAllDonations = async () => {
     donations,
   };
 };
+export const getDonationById = async (id: number) => {
+  const donation = await prisma.foodDonation.findUnique({
+    where: {
+      id: id,
+    },
+  });
+
+  if (!donation) {
+    return {
+      success: false,
+      message: "Donation not found",
+    };
+  }
+
+  return {
+    success: true,
+    donation,
+  };
+};
