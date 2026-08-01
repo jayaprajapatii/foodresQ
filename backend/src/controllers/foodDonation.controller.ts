@@ -3,6 +3,7 @@ import {
   createFoodDonation,
   getAllDonations,
   getDonationById,
+  updateFoodDonation,
 } from "../services/foodDonation.service.js";
 
 export const createDonation = async (
@@ -52,6 +53,29 @@ export const getDonation = async (
     const id = Number(req.params.id);
 
     const result = await getDonationById(id);
+
+    if (!result.success) {
+      return res.status(404).json(result);
+    }
+
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+};
+export const updateDonation = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const id = Number(req.params.id);
+
+    const result = await updateFoodDonation(id, req.body);
 
     if (!result.success) {
       return res.status(404).json(result);

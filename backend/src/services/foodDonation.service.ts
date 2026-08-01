@@ -1,5 +1,8 @@
 import prisma from "../config/prisma.js";
-import { CreateFoodDonationInput } from "../types/foodDonation.types.js";
+import {
+  CreateFoodDonationInput,
+  UpdateFoodDonationInput,
+} from "../types/foodDonation.types.js";
 
 export const createFoodDonation = async (
   data: CreateFoodDonationInput
@@ -64,6 +67,35 @@ export const getDonationById = async (id: number) => {
       message: "Donation not found",
     };
   }
+
+  return {
+    success: true,
+    donation,
+  };
+};
+export const updateFoodDonation = async (
+  id: number,
+  data: UpdateFoodDonationInput
+) => {
+  const existingDonation = await prisma.foodDonation.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!existingDonation) {
+    return {
+      success: false,
+      message: "Donation not found",
+    };
+  }
+
+  const donation = await prisma.foodDonation.update({
+    where: {
+      id,
+    },
+    data,
+  });
 
   return {
     success: true,
