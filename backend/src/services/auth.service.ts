@@ -4,6 +4,8 @@ import {
   RegisterUserInput,
   LoginInput,
 } from "../types/auth.types.js";
+import jwt from "jsonwebtoken";
+import { env } from "../config/env.js";
 
 export const registerUser = async (data: RegisterUserInput) => {
 
@@ -71,9 +73,24 @@ export const loginUser = async (data: LoginInput) => {
       message: "Invalid email or password",
     };
   }
+  if (!env.JWT_SECRET) {
+    throw new Error("JWT_SECRET is not configured");
+  }
+
+  const token = jwt.sign(
+    {
+     userId: user.id,
+     role: user.role,
+    },
+    env.JWT_SECRET,
+    {
+      expiresIn: "1d",
+    }
+  );
 
   return {
     success: true,
+    token,
     user: {
       id: user.id,
       name: user.name,
