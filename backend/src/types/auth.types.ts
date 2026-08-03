@@ -7,3 +7,7 @@ export interface RegisterUserInput {
   phone: string;
   role: UserRole;
 }
+export interface LoginInput {
+  email: string;
+  password: string;
+}
