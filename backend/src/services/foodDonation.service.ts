@@ -110,7 +110,10 @@ export const updateFoodDonation = async (
     donation,
   };
 };
-export const deleteFoodDonation = async (id: number) => {
+export const deleteFoodDonation = async (
+  id: number,
+  restaurantId: number
+) => {
   const existingDonation = await prisma.foodDonation.findUnique({
     where: {
       id,
@@ -121,6 +124,12 @@ export const deleteFoodDonation = async (id: number) => {
     return {
       success: false,
       message: "Donation not found",
+    };
+  }
+  if (existingDonation.restaurantId !== restaurantId) {
+    return {
+      success: false,
+      message: "You are not authorized to delete this donation",
     };
   }
 

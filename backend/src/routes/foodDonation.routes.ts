@@ -14,6 +14,6 @@ router.post("/", authenticate, createDonation);
 router.get("/", getDonations);
 router.get("/:id", getDonation);
 router.patch("/:id", authenticate, updateDonation);
-router.delete("/:id", deleteDonation);
+router.delete("/:id", authenticate, deleteDonation);
 
 export default router;
