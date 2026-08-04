@@ -76,7 +76,8 @@ export const getDonationById = async (id: number) => {
 };
 export const updateFoodDonation = async (
   id: number,
-  data: UpdateFoodDonationInput
+  data: UpdateFoodDonationInput,
+   restaurantId: number
 ) => {
   const existingDonation = await prisma.foodDonation.findUnique({
     where: {
@@ -88,6 +89,12 @@ export const updateFoodDonation = async (
     return {
       success: false,
       message: "Donation not found",
+    };
+  }
+  if (existingDonation.restaurantId !== restaurantId) {
+    return {
+      success: false,
+      message: "You are not authorized to update this donation",
     };
   }
 

@@ -86,10 +86,29 @@ export const updateDonation = async (
   try {
     const id = Number(req.params.id);
 
-    const result = await updateFoodDonation(id, req.body);
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Authentication required",
+      });
+    }
+
+    const result = await updateFoodDonation(
+      id,
+      req.body,
+      req.user.userId
+    );
 
     if (!result.success) {
-      return res.status(404).json(result);
+      if (result.message === "Donation not found") {
+       return res.status(404).json(result);
+      }
+
+      if (result.message === "You are not authorized to update this donation") {
+        return res.status(403).json(result);
+      }
+
+      return res.status(400).json(result);
     }
 
     return res.status(200).json(result);
