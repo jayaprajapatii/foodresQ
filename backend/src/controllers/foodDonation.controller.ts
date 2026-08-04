@@ -12,7 +12,17 @@ export const createDonation = async (
   res: Response
 ) => {
   try {
-    const result = await createFoodDonation(req.body);
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Authentication required",
+      });
+    }
+
+    const result = await createFoodDonation(
+      req.body,
+      req.user.userId
+    );
 
     if (!result.success) {
       return res.status(400).json(result);

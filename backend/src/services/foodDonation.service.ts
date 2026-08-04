@@ -5,11 +5,12 @@ import {
 } from "../types/foodDonation.types.js";
 
 export const createFoodDonation = async (
-  data: CreateFoodDonationInput
+  data: CreateFoodDonationInput,
+  restaurantId: number
 ) => {
   const restaurant = await prisma.user.findUnique({
     where: {
-      id: data.restaurantId,
+      id: restaurantId,
     },
   });
 
@@ -32,7 +33,7 @@ export const createFoodDonation = async (
       foodName: data.foodName,
       quantity: data.quantity,
       unit: data.unit,
-      restaurantId: data.restaurantId,
+      restaurantId,
     },
   });
 
