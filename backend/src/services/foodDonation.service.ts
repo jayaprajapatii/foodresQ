@@ -77,7 +77,7 @@ export const getDonationById = async (id: number) => {
 export const updateFoodDonation = async (
   id: number,
   data: UpdateFoodDonationInput,
-   restaurantId: number
+  restaurantId: number
 ) => {
   const existingDonation = await prisma.foodDonation.findUnique({
     where: {
@@ -144,3 +144,69 @@ export const deleteFoodDonation = async (
     message: "Donation deleted successfully",
   };
 };
+export const claimFoodDonation = async (
+  donationId: number,
+  ngoId: number
+) => {
+  const donation = await prisma.foodDonation.findUnique({
+    where: {
+      id: donationId,
+    },
+  });
+
+  if (!donation) {
+    return {
+      success: false,
+      message: "Donation not found",
+    };
+  }
+
+  if (donation.status !== "AVAILABLE") {
+    return {
+      success: false,
+      message: "Donation is not available for claim",
+    };
+  }
+
+  const ngo = await prisma.user.findUnique({
+    where: {
+      id: ngoId,
+    },
+  });
+
+  if (!ngo || ngo.role !== "NGO") {
+    return {
+      success: false,
+      message: "Only NGOs can claim donations",
+    };
+  }
+
+  const claimResult = await prisma.foodDonation.updateMany({
+    where: {
+      id: donationId,
+      status: "AVAILABLE",
+    },
+    data: {
+      status: "CLAIMED",
+      claimedById: ngoId,
+    },
+  });
+
+  if (claimResult.count === 0) {
+    return {
+      success: false,
+      message: "Donation is not available for claim",
+    };
+  }
+
+  const claimedDonation = await prisma.foodDonation.findUnique({
+    where: {
+      id: donationId,
+    },
+  });
+
+  return {
+    success: true,
+    donation: claimedDonation,
+  };
+}

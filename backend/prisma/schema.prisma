@@ -30,6 +30,7 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   donations FoodDonation[]
+  claimedDonations FoodDonation[] @relation("ClaimedDonations")
 }
 
 enum DonationStatus {
@@ -52,6 +53,9 @@ model FoodDonation {
   foodName        String
   quantity        Int
   unit            String
+  status DonationStatus @default(AVAILABLE)
+  claimedById Int?
+  claimedBy   User? @relation("ClaimedDonations", fields: [claimedById], references: [id])
 
   restaurantId    Int
   restaurant User @relation(fields: [restaurantId], references: [id])
