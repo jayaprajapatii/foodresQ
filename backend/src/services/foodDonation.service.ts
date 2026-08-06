@@ -210,3 +210,48 @@ export const claimFoodDonation = async (
     donation: claimedDonation,
   };
 }
+export const markDonationPickedUp = async (
+  donationId: number,
+  ngoId: number
+) => {
+  const donation = await prisma.foodDonation.findUnique({
+    where: {
+      id: donationId,
+    },
+  });
+
+  if (!donation) {
+    return {
+      success: false,
+      message: "Donation not found",
+    };
+  }
+
+  if (donation.status !== "CLAIMED") {
+    return {
+      success: false,
+      message: "Donation is not ready for pickup",
+    };
+  }
+
+  if (donation.claimedById !== ngoId) {
+    return {
+      success: false,
+      message: "You are not authorized to pick up this donation",
+    };
+  }
+
+  const updatedDonation = await prisma.foodDonation.update({
+    where: {
+      id: donationId,
+    },
+    data: {
+      status: "PICKED_UP",
+    },
+  });
+
+  return {
+    success: true,
+    donation: updatedDonation,
+  };
+};

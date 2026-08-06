@@ -7,6 +7,7 @@ import {
   updateDonation,
   deleteDonation,
   claimDonation,
+  pickupDonation,
 } from "../controllers/foodDonation.controller.js";
 
 const router = Router();
@@ -17,5 +18,6 @@ router.get("/:id", getDonation);
 router.patch("/:id", authenticate, updateDonation);
 router.delete("/:id", authenticate, deleteDonation);
 router.patch("/:id/claim", authenticate, claimDonation);
+router.patch("/:id/pickup", authenticate, pickupDonation);
 
 export default router;

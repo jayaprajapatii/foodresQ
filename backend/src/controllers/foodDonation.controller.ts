@@ -6,6 +6,7 @@ import {
   updateFoodDonation,
   deleteFoodDonation,
   claimFoodDonation,
+  markDonationPickedUp,
 } from "../services/foodDonation.service.js";
 
 export const createDonation = async (
@@ -195,6 +196,54 @@ export const claimDonation = async (
       }
 
       if (result.message === "Donation is not available for claim") {
+        return res.status(409).json(result);
+      }
+
+      return res.status(400).json(result);
+    }
+
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+};
+export const pickupDonation = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const donationId = Number(req.params.id);
+
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Authentication required",
+      });
+    }
+
+    const result = await markDonationPickedUp(
+      donationId,
+      req.user.userId
+    );
+
+    if (!result.success) {
+      if (result.message === "Donation not found") {
+        return res.status(404).json(result);
+      }
+
+      if (
+        result.message ===
+        "You are not authorized to pick up this donation"
+      ) {
+        return res.status(403).json(result);
+      }
+
+      if (result.message === "Donation is not ready for pickup") {
         return res.status(409).json(result);
       }
 
