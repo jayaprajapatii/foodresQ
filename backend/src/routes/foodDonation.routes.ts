@@ -8,6 +8,7 @@ import {
   deleteDonation,
   claimDonation,
   pickupDonation,
+  completeDonation,
 } from "../controllers/foodDonation.controller.js";
 
 const router = Router();
@@ -19,5 +20,6 @@ router.patch("/:id", authenticate, updateDonation);
 router.delete("/:id", authenticate, deleteDonation);
 router.patch("/:id/claim", authenticate, claimDonation);
 router.patch("/:id/pickup", authenticate, pickupDonation);
+router.patch("/:id/complete", authenticate, completeDonation);
 
 export default router;
