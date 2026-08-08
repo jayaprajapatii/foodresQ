@@ -1,31 +1,59 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
-import { createDonation } from "../services/donation.service";
+import {
+  createDonation,
+  getMyDonations,
+} from "../services/donation.service";
 
 function RestaurantDashboard() {
   const [foodName, setFoodName] = useState("");
   const [quantity, setQuantity] = useState("");
   const [unit, setUnit] = useState("plates");
   const [message, setMessage] = useState("");
+  const [donations, setDonations] = useState<any[]>([]);
+  const [loadingDonations, setLoadingDonations] = useState(true);
+
+  useEffect(() => {
+    const loadDonations = async () => {
+      try {
+        const result = await getMyDonations();
+        setDonations(result.donations);
+      } catch (error) {
+        console.error("Failed to load donations:", error);
+      } finally {
+        setLoadingDonations(false);
+      }
+    };
+
+    loadDonations();
+  }, []);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setMessage("");
 
     try {
-      await createDonation({
+      const result = await createDonation({
         foodName,
         quantity: Number(quantity),
         unit,
       });
 
       setMessage("Donation created successfully!");
+
       setFoodName("");
       setQuantity("");
       setUnit("plates");
+
+      setDonations((currentDonations) => [
+        result.donation,
+        ...currentDonations,
+      ]);
     } catch (error) {
       setMessage(
-        error instanceof Error ? error.message : "Failed to create donation"
+        error instanceof Error
+          ? error.message
+          : "Failed to create donation"
       );
     }
   };
@@ -78,6 +106,26 @@ function RestaurantDashboard() {
       </form>
 
       {message && <p>{message}</p>}
+
+      <h2>My Donations</h2>
+
+      {loadingDonations ? (
+        <p>Loading donations...</p>
+      ) : donations.length === 0 ? (
+        <p>No donations yet.</p>
+      ) : (
+        <div>
+          {donations.map((donation) => (
+            <div key={donation.id}>
+              <h3>{donation.foodName}</h3>
+              <p>
+                {donation.quantity} {donation.unit}
+              </p>
+              <p>Status: {donation.status}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

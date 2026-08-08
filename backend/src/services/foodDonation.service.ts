@@ -300,3 +300,18 @@ export const completeFoodDonation = async (
     donation: completedDonation,
   };
 };
+export const getMyDonations = async (restaurantId: number) => {
+  const donations = await prisma.foodDonation.findMany({
+    where: {
+      restaurantId,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return {
+    success: true,
+    donations,
+  };
+};

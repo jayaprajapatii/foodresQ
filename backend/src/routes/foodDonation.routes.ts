@@ -4,6 +4,7 @@ import {
   createDonation,
   getDonations,
   getDonation,
+  getMyFoodDonations,
   updateDonation,
   deleteDonation,
   claimDonation,
@@ -15,6 +16,7 @@ const router = Router();
 
 router.post("/", authenticate, createDonation);
 router.get("/", getDonations);
+router.get("/my", authenticate, getMyFoodDonations);
 router.get("/:id", getDonation);
 router.patch("/:id", authenticate, updateDonation);
 router.delete("/:id", authenticate, deleteDonation);
