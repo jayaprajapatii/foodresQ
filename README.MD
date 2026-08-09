@@ -28,16 +28,17 @@ FoodResQ is a full-stack platform that helps restaurants, caterers, and event or
 
 ```text
 AVAILABLE → CLAIMED → PICKED_UP → COMPLETED
+```
 
 ## Tech Stack
 
-- **Frontend:** React, TypeScript, Vite
-- **Backend:** Node.js, Express.js, TypeScript
-- **Database:** PostgreSQL
-- **ORM:** Prisma
-- **Authentication:** JWT, bcrypt
-- **API:** REST API
-- **Version Control:** Git, GitHub
+* Frontend: React, TypeScript, Vite
+* Backend: Node.js, Express.js, TypeScript
+* Database: PostgreSQL
+* ORM: Prisma
+* Authentication: JWT, bcrypt
+* API: REST API
+* Version Control: Git, GitHub
 
 ## Project Structure
 surplus-food-resQ/
@@ -62,7 +63,6 @@ surplus-food-resQ/
 ## Getting Started
 
 ### Prerequisites
-
 * Node.js, npm, PostgreSQL
 
 
