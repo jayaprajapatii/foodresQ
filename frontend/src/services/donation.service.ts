@@ -98,3 +98,68 @@ export const updateDonation = async (
 
   return result;
 };
+export const claimDonation = async (donationId: number) => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(
+    `http://localhost:5000/api/donations/${donationId}/claim`,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.message || "Failed to claim donation");
+  }
+
+  return result;
+};
+
+export const pickupDonation = async (donationId: number) => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(
+    `http://localhost:5000/api/donations/${donationId}/pickup`,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.message || "Failed to pick up donation");
+  }
+
+  return result;
+};
+
+export const completeDonation = async (donationId: number) => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(
+    `http://localhost:5000/api/donations/${donationId}/complete`,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.message || "Failed to complete donation");
+  }
+
+  return result;
+};
