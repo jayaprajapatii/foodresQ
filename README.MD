@@ -41,6 +41,7 @@ AVAILABLE → CLAIMED → PICKED_UP → COMPLETED
 * Version Control: Git, GitHub
 
 ## Project Structure
+```
 surplus-food-resQ/
 ├── backend/
 │   ├── src/
@@ -59,7 +60,7 @@ surplus-food-resQ/
 │       └── components/
 │
 └── README.md
-
+```
 ## Getting Started
 
 ### Prerequisites
