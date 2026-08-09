@@ -3,6 +3,8 @@ import type { FormEvent } from "react";
 import {
   createDonation,
   getMyDonations,
+  deleteDonation,
+  updateDonation,
 } from "../services/donation.service";
 
 function RestaurantDashboard() {
@@ -12,6 +14,9 @@ function RestaurantDashboard() {
   const [message, setMessage] = useState("");
   const [donations, setDonations] = useState<any[]>([]);
   const [loadingDonations, setLoadingDonations] = useState(true);
+  const [editingDonationId, setEditingDonationId] = useState<number | null>(
+  null
+);
 
   useEffect(() => {
     const loadDonations = async () => {
@@ -57,6 +62,95 @@ function RestaurantDashboard() {
       );
     }
   };
+  const handleDelete = async (donationId: number) => {
+    setMessage("");
+  const confirmed = window.confirm(
+    "Are you sure you want to delete this donation?"
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+    await deleteDonation(donationId);
+
+    setDonations((currentDonations) =>
+      currentDonations.filter(
+        (donation) => donation.id !== donationId
+      )
+    );
+
+    setMessage("Donation deleted successfully!");
+  } catch (error) {
+    setMessage(
+      error instanceof Error
+        ? error.message
+        : "Failed to delete donation"
+    );
+  }
+};
+const handleUpdate = async (donationId: number) => {
+  setMessage("");
+  const donation = donations.find(
+    (item) => item.id === donationId
+  );
+
+  if (!donation) {
+    return;
+  }
+
+  const foodName = window.prompt(
+    "Food name:",
+    donation.foodName
+  );
+
+  if (foodName === null) {
+    return;
+  }
+
+  const quantityInput = window.prompt(
+    "Quantity:",
+    String(donation.quantity)
+  );
+
+  if (quantityInput === null) {
+    return;
+  }
+
+  const quantity = Number(quantityInput);
+
+  if (!Number.isFinite(quantity) || quantity <= 0) {
+    setMessage("Quantity must be a positive number.");
+    return;
+  }
+
+  try {
+    setEditingDonationId(donationId);
+
+    const result = await updateDonation(donationId, {
+      foodName,
+      quantity,
+    });
+    console.log("UPDATE RESULT:", result);
+
+    setDonations((currentDonations) =>
+      currentDonations.map((item) =>
+        item.id === donationId ? result.donation : item
+      )
+    );
+    setMessage("Donation updated successfully!");
+  } catch (error) {
+    console.error("UPDATE ERROR:", error);
+    setMessage(
+      error instanceof Error
+        ? error.message
+        : "Failed to update donation"
+    );
+  } finally {
+    setEditingDonationId(null);
+  }
+};
 
   return (
     <div>
@@ -105,9 +199,8 @@ function RestaurantDashboard() {
         <button type="submit">Create Donation</button>
       </form>
 
-      {message && <p>{message}</p>}
-
       <h2>My Donations</h2>
+      {message && <p>{message}</p>}
 
       {loadingDonations ? (
         <p>Loading donations...</p>
@@ -122,6 +215,20 @@ function RestaurantDashboard() {
                 {donation.quantity} {donation.unit}
               </p>
               <p>Status: {donation.status}</p>
+              <button
+                type="button"
+                onClick={() => handleUpdate(donation.id)}
+                disabled={editingDonationId === donation.id}
+              > 
+                {editingDonationId === donation.id ? "Updating..." : "Edit"}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleDelete(donation.id)}
+              >
+                Delete
+              </button>
             </div>
           ))}
         </div>
