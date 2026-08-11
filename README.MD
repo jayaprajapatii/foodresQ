@@ -68,7 +68,7 @@ surplus-food-resQ/
 ### Installation
 Clone the repository:
 ```bash
-git clone <YOUR_REPOSITORY_URL>
+git clone <REPOSITORY_URL>
 cd surplus-food-resQ
 ```
 ### Backend Setup
