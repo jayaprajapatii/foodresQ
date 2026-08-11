@@ -65,6 +65,36 @@ surplus-food-resQ/
 
 ### Prerequisites
 * Node.js, npm, PostgreSQL
+### Installation
+Clone the repository:
+```bash
+git clone <YOUR_REPOSITORY_URL>
+cd surplus-food-resQ
+```
+### Backend Setup
+``` 
+cd backend
+npm install
+Create a `.env` file inside `backend` directory:
+DATABASE_URL="your-postgresql-url"
+JWT_SECRET="your-secret-key"
+PORT=5000
+Run database migrations: `npx prisma migrate dev`
+Start backend server: `npm run dev`.
+The backend will run on: `http://localhost:5000`
+```
+### Frontend Setup
+```
+cd frontend
+npm install
+npm run dev
+The frontend will run on: `http://localhost:5173`
+```
+### Run the application
+Make sure PostgreSQL, the backend server, and the frontend server are running.
+Then open: `http://localhost:5173`
+
+
 
 
 
