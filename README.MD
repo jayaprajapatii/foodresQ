@@ -1,6 +1,13 @@
 # surplus-food-resQ
 
 FoodResQ is a full-stack platform that helps restaurants, caterers, and event organizers donate surplus food to NGOs, reducing food waste and improving access to food.
+
+## Overview
+
+A significant amount of surplus food from restaurants can go to waste even when it is still suitable for consumption. Surplus Food Rescue provides a platform where restaurants can list their available surplus food and NGOs can claim, collect, and complete those donations.
+
+The application implements role-based authentication and a complete donation lifecycle from creation to completion.
+
 ## Features
 
 ### Restaurant
